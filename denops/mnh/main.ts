@@ -1,9 +1,12 @@
-import { Denops, ensureString } from "./deps.ts";
+import {
+    Denops,
+    ensure,
+} from "./deps.ts";
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async echo(text: unknown): Promise<unknown> {
-      ensureString(text);
+      ensure(text);
       return await Promise.resolve(text);
     },
   };
