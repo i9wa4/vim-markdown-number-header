@@ -28,7 +28,7 @@ export async function main(denops: Denops): Promise<void> {
       }
 
       // replace current buffer content
-      await replace(denops, bufnr, contentnew);
+      await replace(denops, bufnr, contentNew);
     },
   };
 
