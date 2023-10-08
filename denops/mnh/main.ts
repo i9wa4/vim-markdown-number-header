@@ -12,7 +12,7 @@ export async function main(denops: Denops): Promise<void> {
       return await Promise.resolve(text);
     },
 
-    async test(text: unknown): Promise<unknown> {
+    async test(): Promise<unknown> {
       const info = await open(denops, "%");
       return info.bufnr;
     },
