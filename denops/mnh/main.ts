@@ -24,7 +24,9 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   await denops.cmd(
-    `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`,
-    `command! -nargs=0 DebugEcho echomsg denops#request('${denops.name}', 'test')`,
+    `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`
+  );
+  await denops.cmd(
+    `command! -nargs=0 DebugEcho echomsg denops#request('${denops.name}', 'test')`
   );
 };
