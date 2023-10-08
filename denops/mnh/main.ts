@@ -12,14 +12,19 @@ export async function main(denops: Denops): Promise<void> {
       return await Promise.resolve(text);
     },
 
-    async test() {
+    async debug() {
+      const bufnr = await denops.call("bufnr") as number;
       const content = (await denops.call(
         "getbufline",
-        await denops.call("bufnr"),
+        bufnr,
         1,
         "$"
       )) as string[];
-      return content.join("\n");
+      const contentnew: string[] = [];
+      for (let i = 0; i < content.length; i++) {
+        contentnew[i] = content[i].replace('# ', '## ');
+      }
+      await replace(denops, bufnr, contentnew);
     },
   };
 
@@ -27,6 +32,6 @@ export async function main(denops: Denops): Promise<void> {
     `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`
   );
   await denops.cmd(
-    `command! -nargs=? DebugEcho echomsg denops#request('${denops.name}', 'test', [])`
+    `command! -nargs=? Debug echomsg denops#request('${denops.name}', 'test', [])`
   );
 };
