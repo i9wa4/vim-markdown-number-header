@@ -3,6 +3,7 @@ import {
   ensure,
   is,
   open,
+  replace,
 } from "./deps.ts";
 
 export async function main(denops: Denops): Promise<void> {
