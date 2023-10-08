@@ -8,12 +8,8 @@ import {
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    async echo(text: unknown): Promise<unknown> {
-      ensure(text, is.String);
-      return await Promise.resolve(text);
-    },
-
-    async debug() {
+    async addNumber() {
+      // get current buffer content
       const bufnr = await denops.call("bufnr") as number;
       const content = (await denops.call(
         "getbufline",
@@ -21,18 +17,20 @@ export async function main(denops: Denops): Promise<void> {
         1,
         "$"
       )) as string[];
+
+      // add number for headings
       const contentnew: string[] = [];
       for (let i = 0; i < content.length; i++) {
+        // TODO: add number
         contentnew[i] = content[i].replace('# ', '## ');
       }
+
+      // replace current buffer content
       await replace(denops, bufnr, contentnew);
     },
   };
 
   await denops.cmd(
-    `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`
-  );
-  await denops.cmd(
-    `command! -nargs=? Debug echomsg denops#request('${denops.name}', 'debug', [])`
+    `command! -nargs=? AddNumber echomsg denops#request('${denops.name}', 'addNumber', [])`
   );
 };
