@@ -24,6 +24,8 @@ export async function main(denops: Denops): Promise<void> {
       for (let i = 0; i < content.length; i++) {
         if (content[i].match('^#')) {
           contentNew[i] = "header!" + content[i]
+        } else {
+          contentNew[i] = content[i]
         }
       }
 
