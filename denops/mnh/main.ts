@@ -19,8 +19,10 @@ export async function main(denops: Denops): Promise<void> {
       )) as string[];
 
       // add number for headings
+      // TODO: define header level shift parameter
       const secNumber: string[] = [0, 0, 0, 0, 0, 0];
       const contentNew: string[] = [];
+      let secDepth: number = 0;
       for (let i = 0; i < content.length; i++) {
         if (content[i].match('^#')) {
           contentNew[i] = "header!" + content[i]
