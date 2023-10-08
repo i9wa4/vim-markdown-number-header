@@ -8,7 +8,7 @@ import {
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    async addNumber() {
+    async addNumber(): Promise<void> {
       // get current buffer content
       const bufnr = await denops.call("bufnr") as number;
       const content = (await denops.call(
