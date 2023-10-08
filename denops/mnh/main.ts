@@ -19,7 +19,7 @@ export async function main(denops: Denops): Promise<void> {
         1,
         "$"
       )) as string[];
-      return content;
+      return content.join("\n");
     },
   };
 
@@ -27,6 +27,6 @@ export async function main(denops: Denops): Promise<void> {
     `command! -nargs=1 HelloWorldEcho echomsg denops#request('${denops.name}', 'echo', [<q-args>])`
   );
   await denops.cmd(
-    `command! -nargs=0 DebugEcho echomsg denops#request('${denops.name}', 'test')`
+    `command! -nargs=? DebugEcho echomsg denops#request('${denops.name}', 'test', [])`
   );
 };
