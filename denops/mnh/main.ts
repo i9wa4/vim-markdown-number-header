@@ -1,12 +1,13 @@
 import {
     Denops,
-    ensure
+    ensure,
+    is,
 } from "./deps.ts";
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async echo(text: unknown): Promise<unknown> {
-      ensure(text);
+      ensure(text, is.String);
       return await Promise.resolve(text);
     },
   };
