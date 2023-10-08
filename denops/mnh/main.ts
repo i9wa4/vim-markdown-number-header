@@ -19,10 +19,12 @@ export async function main(denops: Denops): Promise<void> {
       )) as string[];
 
       // add number for headings
-      const contentnew: string[] = [];
+      const secNumber: string[] = [0, 0, 0, 0, 0, 0];
+      const contentNew: string[] = [];
       for (let i = 0; i < content.length; i++) {
-        // TODO: add number
-        contentnew[i] = content[i].replace('# ', '## ');
+        if (content[i].match('^#')) {
+          contentNew[i] = "header!" + content[i]
+        }
       }
 
       // replace current buffer content
