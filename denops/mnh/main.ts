@@ -7,7 +7,7 @@ import {
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    async numberHeader(): Promise<unknown> {
+    async numberHeader(): Promise<void> {
       // get global variables
       let secLevelShift: number =
         await vars.globals.get(denops, "mnh_header_level_shift", 1);
@@ -68,7 +68,6 @@ export async function main(denops: Denops): Promise<void> {
 
       // replace current buffer content
       await replace(denops, bufnr, contentNew);
-      return "The numbers for the headings have been added/modified.";
     },
   };
 
