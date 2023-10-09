@@ -2,6 +2,7 @@ import {
   Denops,
   open,
   replace,
+  vars,
 } from "./deps.ts";
 
 export async function main(denops: Denops): Promise<void> {
@@ -17,7 +18,8 @@ export async function main(denops: Denops): Promise<void> {
       )) as string[];
 
       // number headers
-      let secLevelShift: number = 1;
+      let secLevelShift: number =
+        await vars.globals.get(denops, "mnh_header_level_shift", 1);
       let secLevel: number = 0;
       let secLevelPrev: number = 0;
       const secNumber: string[] = [0, 0, 0, 0, 0, 0];
@@ -55,7 +57,7 @@ export async function main(denops: Denops): Promise<void> {
             + " "
             + secNumber.slice(secLevelShift, secLevel).join(".")
             + "."
-            + content[i].replace(/^#+ *([0-9]\.)*/, "");
+            + content[i].replace(/^#+ ?([0-9]\.)* /, " ");
         } else {
           contentNew[i] = content[i];
         }
