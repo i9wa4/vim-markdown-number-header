@@ -72,6 +72,6 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   await denops.cmd(
-    `command! -nargs=? NumberHeader echomsg denops#request('${denops.name}', 'numberHeader', [])`
+    `command! -nargs=? NumberHeader call denops#request('${denops.name}', 'numberHeader', [])`
   );
 };
