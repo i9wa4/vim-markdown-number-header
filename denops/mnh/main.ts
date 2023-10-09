@@ -7,7 +7,7 @@ import {
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    async numberHeader(): Promise<void> {
+    async numberHeader() {
       // get global variables
       let secLevelShift: number =
         await vars.globals.get(denops, "mnh_header_level_shift", 1);
