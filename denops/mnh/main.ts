@@ -8,6 +8,10 @@ import {
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async numberHeader(): Promise<unknown> {
+      // get global variables
+      let secLevelShift: number =
+        await vars.globals.get(denops, "mnh_header_level_shift", 1);
+
       // get current buffer content
       const bufnr = await denops.call("bufnr") as number;
       const content = (await denops.call(
@@ -18,8 +22,6 @@ export async function main(denops: Denops): Promise<void> {
       )) as string[];
 
       // number headers
-      let secLevelShift: number =
-        await vars.globals.get(denops, "mnh_header_level_shift", 1);
       let secLevel: number = 0;
       let secLevelPrev: number = 0;
       const secNumber: string[] = [0, 0, 0, 0, 0, 0];
