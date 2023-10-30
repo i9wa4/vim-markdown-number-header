@@ -24,9 +24,21 @@ export async function main(denops: Denops): Promise<void> {
       // number headers
       let secLevel: number = 0;
       let secLevelPrev: number = 0;
+      let isInsideCodeblock: boolean = false;
       const secNumber: string[] = [0, 0, 0, 0, 0, 0];
       const contentNew: string[] = [];
       for (let i = 0; i < content.length; i++) {
+        if content[i].includes('```') {
+          // code block tag
+          isInsideCodeblock = !isInsideCodeblock;
+        }
+
+        if isInsideCodeblock {
+          // this line is inside a code block
+          contentNew[i] = content[i];
+          continue;
+        }
+
         // calculate the section level
         if (content[i].match('^#{6,}')) {
           secLevel = 6;
