@@ -28,12 +28,12 @@ export async function main(denops: Denops): Promise<void> {
       const secNumber: string[] = [0, 0, 0, 0, 0, 0];
       const contentNew: string[] = [];
       for (let i = 0; i < content.length; i++) {
-        if content[i].includes('\`\`\`') {
+        if (content[i].match('^\s*?```')) {
           // code block tag
           isInsideCodeblock = !isInsideCodeblock;
         }
 
-        if isInsideCodeblock {
+        if (isInsideCodeblock) {
           // this line is inside a code block
           contentNew[i] = content[i];
           continue;
