@@ -25,8 +25,8 @@ export async function main(denops: Denops): Promise<void> {
       let secLevel: number = 0;
       let secLevelPrev: number = 0;
       let isInsideCodeblock: boolean = false;
-      const secNumber: string[] = [0, 0, 0, 0, 0, 0];
-      const contentNew: string[] = [];
+      let secNumber: number[] = [0, 0, 0, 0, 0, 0];
+      let contentNew: string[] = [];
       for (let i = 0; i < content.length; i++) {
         if (content[i].match('^\s*?```')) {
           // code block tag
