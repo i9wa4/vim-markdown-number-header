@@ -6,7 +6,7 @@ This is a Vim/Neovim plugin numbering/renumbering headings.
 VARIABLE                                     *markdown-number-header-variable*
 
 let g:mnh_header_level_shift = 1~
-  Starting level for numbering/renumbering.
+  Starting level for numbering/renumbering headings.
 
   0: number/renumber from h1 level
   1: (default) number/renumber from h2 level
