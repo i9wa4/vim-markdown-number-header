@@ -1,6 +1,6 @@
 # markdown-number-header.vim
 
-This is a Vim/Neovim plugin numbering/renumbering headings.
+This is a Vim/Neovim plugin numbering/renumbering markdown headings.
 
 Read [help](doc/markdown-number-header.txt) for details.
 
