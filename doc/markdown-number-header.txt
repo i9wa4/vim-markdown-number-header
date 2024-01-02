@@ -1,0 +1,24 @@
+*markdown-number-header.txt*  Plugin for numbering markdown headings
+
+This is a Vim/Neovim plugin numbering/renumbering headings.
+
+==============================================================================
+VARIABLE                                     *markdown-number-header-variable*
+
+let g:mnh_header_level_shift = 1~
+    Starting level for numbering.
+
+    0: number from h1 level
+    1: (default) number from h2 level
+    N: number from h(N+1) level
+
+==============================================================================
+COMMAND                                       *markdown-number-header-command*
+
+NumberHeader~
+
+    :NumberHeader
+
+Number/Renumber headings.
+
+vim: ft=help tw=78 et ts=2 sw=2 sts=2 norl

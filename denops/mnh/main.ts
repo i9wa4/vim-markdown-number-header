@@ -73,7 +73,10 @@ export async function main(denops: Denops): Promise<void> {
             + "."
             + content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
         } else {
-          contentNew[i] = content[i];
+          // contentNew[i] = content[i];
+          contentNew[i] =
+            "#".repeat(secLevel)
+            + content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
         }
         secLevelPrev = secLevel;
       }
