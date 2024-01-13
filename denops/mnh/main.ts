@@ -1,6 +1,5 @@
 import {
   Denops,
-  open,
   replace,
   vars,
 } from "./deps.ts";
@@ -9,7 +8,7 @@ export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async numberHeader() {
       // get global variables
-      let secLevelShift: number =
+      const secLevelShift: number =
         await vars.globals.get(denops, "mnh_header_level_shift", 1);
 
       // get current buffer content
@@ -22,11 +21,11 @@ export async function main(denops: Denops): Promise<void> {
       )) as string[];
 
       // number headers
-      let secLevel: number = 0;
-      let secLevelPrev: number = 0;
-      let isInsideCodeblock: boolean = false;
-      let secNumber: number[] = [0, 0, 0, 0, 0, 0];
-      let contentNew: string[] = [];
+      let secLevel = 0;
+      let secLevelPrev = 0;
+      let isInsideCodeblock = false;
+      const secNumber = [0, 0, 0, 0, 0, 0];
+      const contentNew = [];
       for (let i = 0; i < content.length; i++) {
         if (content[i].match('^\s*?```')) {
           // code block tag
