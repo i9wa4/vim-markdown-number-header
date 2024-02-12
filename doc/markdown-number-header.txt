@@ -1,4 +1,4 @@
-*markdown-number-header.txt*            numbering/renumbering markdown headings
+*markdown-number-header.txt*            Numbering/Renumbering markdown headings.
 
 This is a Vim/Neovim plugin numbering/renumbering markdown headings.
 
