@@ -1,4 +1,4 @@
-# markdown-number-header.vim
+# vim-markdown-number-header
 
 This is a Vim/Neovim plugin numbering/renumbering markdown headings.
 
