@@ -21,7 +21,7 @@ Execute the command.
 :NumberHeader
 ```
 
-If you want to execute the command every time on save .md automatically, write like this to your vimrc.
+If you want to execute the command every time on save .md automatically, write the followings in your vimrc.
 
 ```
 augroup mnh
