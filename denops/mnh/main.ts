@@ -27,9 +27,9 @@ export async function main(denops: Denops): Promise<void> {
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
-        if (content[i].match('^\s*?```')
-          || content[i].match('^\s*?{% highlight')
-          || content[i].match('^\s*?{% endhighlight')) {
+        if (content[i].match('^\\s*?```')
+          || content[i].match('^\\s*?{% highlight')
+          || content[i].match('^\\s*?{% endhighlight')) {
           // code block tag
           isInsideCodeblock = !isInsideCodeblock;
         }
