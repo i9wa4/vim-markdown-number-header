@@ -27,21 +27,20 @@ export async function main(denops: Denops): Promise<void> {
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
-        if (content[i].match('^\\s*?```')
-          || content[i].match('^\\s*?~~~')
-          || content[i].match('^\\s*?{% highlight')
-          || content[i].match('^\\s*?{% endhighlight')) {
-          // code block tag
+        // Check for code block delimiters first
+        if (content[i].match(/^s*?(```|~~~)/)) {
           isInsideCodeblock = !isInsideCodeblock;
+          contentNew[i] = content[i]; // Keep the delimiter line
+          continue; // Skip numbering logic for delimiter lines
         }
 
+        // If inside a code block, keep the line as is and skip numbering
         if (isInsideCodeblock) {
-          // this line is inside a code block
           contentNew[i] = content[i];
           continue;
         }
 
-        // calculate the section level
+        // calculate the section level (only if not inside a code block)
         if (content[i].match('^#{6,}')) {
           secLevel = 6;
         } else if (content[i].match('^#{5}')) {
