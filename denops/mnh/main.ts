@@ -24,17 +24,30 @@ export async function main(denops: Denops): Promise<void> {
       let secLevel = 0;
       let secLevelPrev = 0;
       let isInsideCodeblock = false;
+      let codeBlockDelimiter: string | null = null; // Track the delimiter type
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
-        // Check for code block delimiters first
-        if (content[i].match(/^s*?(```|~~~)/)) {
-          isInsideCodeblock = !isInsideCodeblock;
-          contentNew[i] = content[i]; // Keep the delimiter line
+        const line = content[i];
+        const match = line.match(/^\s*(```|~~~)/);
+
+        if (match) {
+          const currentDelimiter = match[1];
+          if (!isInsideCodeblock) {
+            // Entering the outermost code block
+            isInsideCodeblock = true;
+            codeBlockDelimiter = currentDelimiter;
+          } else if (currentDelimiter === codeBlockDelimiter) {
+            // Exiting the outermost code block
+            isInsideCodeblock = false;
+            codeBlockDelimiter = null;
+          }
+          // Keep the delimiter line regardless of nesting level
+          contentNew[i] = line;
           continue; // Skip numbering logic for delimiter lines
         }
 
-        // If inside a code block, keep the line as is and skip numbering
+        // If inside a code block (determined by the outermost delimiter), keep the line as is
         if (isInsideCodeblock) {
           contentNew[i] = content[i];
           continue;
