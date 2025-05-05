@@ -23,7 +23,8 @@ export async function main(denops: Denops): Promise<void> {
       let secLevel = 0;
       let secLevelPrev = 0;
       let isInsideCodeblock = false;
-      let codeBlockDelimiter: string | null = null; // Track the delimiter type
+      let codeBlockDelimiter: string | null = null; // Tracks the type of delimiter (``` or ~~~) for the outermost code block.
+                                                   // This helps determine whether the current line is inside or outside a code block.
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
