@@ -1,15 +1,14 @@
-import {
-  Denops,
-  replace,
-  vars,
-} from "./deps.ts";
+import { Denops, replace, vars } from "./deps.ts";
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async numberHeader() {
       // get global variables
-      const secLevelShift: number =
-        await vars.globals.get(denops, "mnh_header_level_shift", 1);
+      const secLevelShift: number = await vars.globals.get(
+        denops,
+        "mnh_header_level_shift",
+        1,
+      );
 
       // get current buffer content
       const bufnr = await denops.call("bufnr") as number;
@@ -17,41 +16,55 @@ export async function main(denops: Denops): Promise<void> {
         "getbufline",
         bufnr,
         1,
-        "$"
+        "$",
       )) as string[];
 
       // number headers
       let secLevel = 0;
       let secLevelPrev = 0;
       let isInsideCodeblock = false;
+      let codeBlockDelimiter: string | null = null; // Tracks the type of delimiter (``` or ~~~) for the outermost code block.
+                                                   // This helps determine whether the current line is inside or outside a code block.
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
-        if (content[i].match('^\\s*?```')
-          || content[i].match('^\\s*?{% highlight')
-          || content[i].match('^\\s*?{% endhighlight')) {
-          // code block tag
-          isInsideCodeblock = !isInsideCodeblock;
+        const line = content[i];
+        const match = line.match(/^\s*(```|~~~)/);
+
+        if (match) {
+          const currentDelimiter = match[1];
+          if (!isInsideCodeblock) {
+            // Entering the outermost code block
+            isInsideCodeblock = true;
+            codeBlockDelimiter = currentDelimiter;
+          } else if (currentDelimiter === codeBlockDelimiter) {
+            // Exiting the outermost code block
+            isInsideCodeblock = false;
+            codeBlockDelimiter = null;
+          }
+          // Keep the delimiter line regardless of nesting level
+          contentNew[i] = line;
+          continue; // Skip numbering logic for delimiter lines
         }
 
+        // If inside a code block (determined by the outermost delimiter), keep the line as is
         if (isInsideCodeblock) {
-          // this line is inside a code block
           contentNew[i] = content[i];
           continue;
         }
 
-        // calculate the section level
-        if (content[i].match('^#{6,}')) {
+        // calculate the section level (only if not inside a code block)
+        if (content[i].match("^#{6,}")) {
           secLevel = 6;
-        } else if (content[i].match('^#{5}')) {
+        } else if (content[i].match("^#{5}")) {
           secLevel = 5;
-        } else if (content[i].match('^#{4}')) {
+        } else if (content[i].match("^#{4}")) {
           secLevel = 4;
-        } else if (content[i].match('^#{3}')) {
+        } else if (content[i].match("^#{3}")) {
           secLevel = 3;
-        } else if (content[i].match('^#{2}')) {
+        } else if (content[i].match("^#{2}")) {
           secLevel = 2;
-        } else if (content[i].match('^#{1}')) {
+        } else if (content[i].match("^#{1}")) {
           secLevel = 1;
         } else {
           // this line is not a header
@@ -67,17 +80,15 @@ export async function main(denops: Denops): Promise<void> {
 
         // add/modify the section number
         if (secLevel > secLevelShift) {
-          contentNew[i] =
-            "#".repeat(secLevel)
-            + " "
-            + secNumber.slice(secLevelShift, secLevel).join(".")
-            + "."
-            + content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+          contentNew[i] = "#".repeat(secLevel) +
+            " " +
+            secNumber.slice(secLevelShift, secLevel).join(".") +
+            "." +
+            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
         } else {
           // contentNew[i] = content[i];
-          contentNew[i] =
-            "#".repeat(secLevel)
-            + content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+          contentNew[i] = "#".repeat(secLevel) +
+            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
         }
         secLevelPrev = secLevel;
       }
@@ -88,6 +99,6 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   await denops.cmd(
-    `command! -nargs=? NumberHeader call denops#request('${denops.name}', 'numberHeader', [])`
+    `command! -nargs=? NumberHeader call denops#request('${denops.name}', 'numberHeader', [])`,
   );
-};
+}
