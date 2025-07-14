@@ -20,6 +20,11 @@ NumberHeader~
 
 	Number/Renumber markdown headings.
 
+RemoveNumbers~
+	:RemoveNumbers
+
+	Remove all numbers from markdown headings.
+
 ==============================================================================
 LIMITATION                                   *markdown-number-header-limitation*
 

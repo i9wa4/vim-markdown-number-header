@@ -100,9 +100,33 @@ export async function main(denops: Denops): Promise<void> {
       // replace current buffer content
       await replace(denops, bufnr, contentNew);
     },
+
+    async removeNumbers() {
+      // get current header level shift
+      const currentShift = await vars.globals.get(
+        denops,
+        "mnh_header_level_shift",
+        1,
+      );
+
+      // set level shift to maximum header level
+      // this effectively removes all numbers since no header level can be greater than 6
+      const REMOVE_ALL_NUMBERS_SHIFT = 6; // h1-h6, so shift=6 means secLevel > 6 is never true
+      await vars.globals.set(denops, "mnh_header_level_shift", REMOVE_ALL_NUMBERS_SHIFT);
+
+      // call numberHeader to process headers with the high shift value
+      await denops.dispatcher.numberHeader();
+
+      // restore original level shift
+      await vars.globals.set(denops, "mnh_header_level_shift", currentShift);
+    },
   };
 
   await denops.cmd(
     `command! -nargs=? NumberHeader call denops#request('${denops.name}', 'numberHeader', [])`,
+  );
+
+  await denops.cmd(
+    `command! -nargs=? RemoveNumbers call denops#request('${denops.name}', 'removeNumbers', [])`,
   );
 }
