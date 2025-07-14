@@ -15,10 +15,16 @@ Install as a general Vim/Neovim plugin.
 
 ## 3. Usage
 
-Execute the command.
+Execute the command to add numbers to headers.
 
 ```
 :NumberHeader
+```
+
+Execute the command to remove numbers from headers.
+
+```
+:RemoveNumbers
 ```
 
 If you want to execute the command every time on save .md automatically, write the followings in your vimrc.

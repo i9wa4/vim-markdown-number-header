@@ -20,4 +20,9 @@ NumberHeader~
 
 	Number/Renumber markdown headings.
 
+RemoveNumbers~
+	:RemoveNumbers
+
+	Remove all numbers from markdown headings.
+
 vim: ft=help tw=78 et ts=2 sw=2 sts=2 norl

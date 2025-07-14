@@ -96,9 +96,31 @@ export async function main(denops: Denops): Promise<void> {
       // replace current buffer content
       await replace(denops, bufnr, contentNew);
     },
+
+    async removeNumbers() {
+      // get current header level shift
+      const currentShift = await vars.globals.get(
+        denops,
+        "mnh_header_level_shift",
+        1,
+      );
+
+      // temporarily set level shift to 99 to remove all numbers
+      await vars.globals.set(denops, "mnh_header_level_shift", 99);
+
+      // call numberHeader to remove numbers
+      await denops.dispatcher.numberHeader();
+
+      // restore original level shift
+      await vars.globals.set(denops, "mnh_header_level_shift", currentShift);
+    },
   };
 
   await denops.cmd(
     `command! -nargs=? NumberHeader call denops#request('${denops.name}', 'numberHeader', [])`,
+  );
+
+  await denops.cmd(
+    `command! -nargs=? RemoveNumbers call denops#request('${denops.name}', 'removeNumbers', [])`,
   );
 }
