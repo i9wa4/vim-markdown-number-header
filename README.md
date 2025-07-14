@@ -29,3 +29,7 @@ augroup mnh
   autocmd BufWritePost *.md execute 'NumberHeader'
 augroup END
 ```
+
+## 4. Limitations
+
+- Only headings up to h6 (`######`) are supported for numbering/renumbering.
