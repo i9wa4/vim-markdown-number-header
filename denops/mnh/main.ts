@@ -84,11 +84,11 @@ export async function main(denops: Denops): Promise<void> {
             " " +
             secNumber.slice(secLevelShift, secLevel).join(".") +
             "." +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            content[i].replace(/^#+ ?([0-9]*\.)* ?/, " ");
         } else {
           // contentNew[i] = content[i];
           contentNew[i] = "#".repeat(secLevel) +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            content[i].replace(/^#+ ?([0-9]*\.)* ?/, " ");
         }
         secLevelPrev = secLevel;
       }
