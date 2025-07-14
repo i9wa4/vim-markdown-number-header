@@ -98,54 +98,23 @@ export async function main(denops: Denops): Promise<void> {
     },
 
     async removeNumbers() {
-      // get current buffer content
-      const bufnr = await denops.call("bufnr") as number;
-      const content = (await denops.call(
-        "getbufline",
-        bufnr,
+      // get current header level shift
+      const currentShift = await vars.globals.get(
+        denops,
+        "mnh_header_level_shift",
         1,
-        "$",
-      )) as string[];
+      );
 
-      // remove numbers from headers
-      let isInsideCodeblock = false;
-      let codeBlockDelimiter: string | null = null;
-      const contentNew = [];
-      
-      for (let i = 0; i < content.length; i++) {
-        const line = content[i];
-        const match = line.match(/^\s*(```|~~~)/);
+      // set level shift to a value higher than any reasonable header depth
+      // this effectively removes all numbers since all headers will be below the shift level
+      const REMOVE_ALL_NUMBERS_SHIFT = 7; // headers only go up to h6
+      await vars.globals.set(denops, "mnh_header_level_shift", REMOVE_ALL_NUMBERS_SHIFT);
 
-        if (match) {
-          const currentDelimiter = match[1];
-          if (!isInsideCodeblock) {
-            isInsideCodeblock = true;
-            codeBlockDelimiter = currentDelimiter;
-          } else if (currentDelimiter === codeBlockDelimiter) {
-            isInsideCodeblock = false;
-            codeBlockDelimiter = null;
-          }
-          contentNew[i] = line;
-          continue;
-        }
+      // call numberHeader to process headers with the high shift value
+      await denops.dispatcher.numberHeader();
 
-        if (isInsideCodeblock) {
-          contentNew[i] = content[i];
-          continue;
-        }
-
-        // check if this line is a header
-        const headerMatch = content[i].match(/^(#{1,6}) ?([0-9]*\.)* (.*)$/);
-        if (headerMatch) {
-          // remove numbers from header
-          contentNew[i] = headerMatch[1] + " " + headerMatch[3];
-        } else {
-          contentNew[i] = content[i];
-        }
-      }
-
-      // replace current buffer content
-      await replace(denops, bufnr, contentNew);
+      // restore original level shift
+      await vars.globals.set(denops, "mnh_header_level_shift", currentShift);
     },
   };
 
