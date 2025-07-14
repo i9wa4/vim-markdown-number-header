@@ -25,4 +25,9 @@ RemoveNumbers~
 
 	Remove all numbers from markdown headings.
 
+==============================================================================
+LIMITATION                                   *markdown-number-header-limitation*
+
+	Only headings up to h6 (######) are supported for numbering/renumbering.
+
 vim: ft=help tw=78 et ts=2 sw=2 sts=2 norl

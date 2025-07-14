@@ -24,7 +24,7 @@ export async function main(denops: Denops): Promise<void> {
       let secLevelPrev = 0;
       let isInsideCodeblock = false;
       let codeBlockDelimiter: string | null = null; // Tracks the type of delimiter (``` or ~~~) for the outermost code block.
-                                                   // This helps determine whether the current line is inside or outside a code block.
+      // This helps determine whether the current line is inside or outside a code block.
       const secNumber = [0, 0, 0, 0, 0, 0];
       const contentNew = [];
       for (let i = 0; i < content.length; i++) {
@@ -80,15 +80,19 @@ export async function main(denops: Denops): Promise<void> {
 
         // add/modify the section number
         if (secLevel > secLevelShift) {
+          const headerContent = content[i].match(/^#+ ?([0-9]*\.)* ?(.*)$/);
+          const textContent = headerContent ? headerContent[2] : "";
           contentNew[i] = "#".repeat(secLevel) +
             " " +
             secNumber.slice(secLevelShift, secLevel).join(".") +
             "." +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            (textContent ? " " + textContent : "");
         } else {
           // contentNew[i] = content[i];
+          const headerContent = content[i].match(/^#+ ?([0-9]*\.)* ?(.*)$/);
+          const textContent = headerContent ? headerContent[2] : "";
           contentNew[i] = "#".repeat(secLevel) +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            (textContent ? " " + textContent : "");
         }
         secLevelPrev = secLevel;
       }
