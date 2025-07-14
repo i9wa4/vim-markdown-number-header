@@ -80,15 +80,19 @@ export async function main(denops: Denops): Promise<void> {
 
         // add/modify the section number
         if (secLevel > secLevelShift) {
+          const headerContent = content[i].match(/^#+ ?([0-9]*\.)* ?(.*)$/);
+          const textContent = headerContent ? headerContent[2] : "";
           contentNew[i] = "#".repeat(secLevel) +
             " " +
             secNumber.slice(secLevelShift, secLevel).join(".") +
             "." +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            (textContent ? " " + textContent : "");
         } else {
           // contentNew[i] = content[i];
+          const headerContent = content[i].match(/^#+ ?([0-9]*\.)* ?(.*)$/);
+          const textContent = headerContent ? headerContent[2] : "";
           contentNew[i] = "#".repeat(secLevel) +
-            content[i].replace(/^#+ ?([0-9]*\.)* /, " ");
+            (textContent ? " " + textContent : "");
         }
         secLevelPrev = secLevel;
       }
