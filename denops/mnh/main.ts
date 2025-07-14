@@ -98,21 +98,54 @@ export async function main(denops: Denops): Promise<void> {
     },
 
     async removeNumbers() {
-      // get current header level shift
-      const currentShift = await vars.globals.get(
-        denops,
-        "mnh_header_level_shift",
+      // get current buffer content
+      const bufnr = await denops.call("bufnr") as number;
+      const content = (await denops.call(
+        "getbufline",
+        bufnr,
         1,
-      );
+        "$",
+      )) as string[];
 
-      // temporarily set level shift to 99 to remove all numbers
-      await vars.globals.set(denops, "mnh_header_level_shift", 99);
+      // remove numbers from headers
+      let isInsideCodeblock = false;
+      let codeBlockDelimiter: string | null = null;
+      const contentNew = [];
+      
+      for (let i = 0; i < content.length; i++) {
+        const line = content[i];
+        const match = line.match(/^\s*(```|~~~)/);
 
-      // call numberHeader to remove numbers
-      await denops.dispatcher.numberHeader();
+        if (match) {
+          const currentDelimiter = match[1];
+          if (!isInsideCodeblock) {
+            isInsideCodeblock = true;
+            codeBlockDelimiter = currentDelimiter;
+          } else if (currentDelimiter === codeBlockDelimiter) {
+            isInsideCodeblock = false;
+            codeBlockDelimiter = null;
+          }
+          contentNew[i] = line;
+          continue;
+        }
 
-      // restore original level shift
-      await vars.globals.set(denops, "mnh_header_level_shift", currentShift);
+        if (isInsideCodeblock) {
+          contentNew[i] = content[i];
+          continue;
+        }
+
+        // check if this line is a header
+        const headerMatch = content[i].match(/^(#{1,6}) ?([0-9]*\.)* (.*)$/);
+        if (headerMatch) {
+          // remove numbers from header
+          contentNew[i] = headerMatch[1] + " " + headerMatch[3];
+        } else {
+          contentNew[i] = content[i];
+        }
+      }
+
+      // replace current buffer content
+      await replace(denops, bufnr, contentNew);
     },
   };
 
